@@ -6,25 +6,49 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:ctos_app"
         mc:Ignorable="d"
-        Title="CTOS Apps" Height="450" Width="800" ResizeMode="NoResize"
+        Title="CTOS Apps" 
+        WindowState="Maximized"
+        WindowStyle="SingleBorderWindow"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         >
-    
-    
-    <Grid>
-        <StackPanel>
-            <materialDesign:Card Padding="32" Margin="16">
-                <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}"><Run Text="My First Material Design App"/></TextBlock>
-            </materialDesign:Card>
-            
-            <Button Content="Do Animation" HorizontalAlignment="Center" Margin="20" />
-        </StackPanel>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Shadows.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.CheckBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ListBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.RadioButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBlock.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <domain:DocumentationLinks DataContext="{Binding SelectedItem}" />
+
+        <ScrollViewer x:Name="MainScrollViewer"
+                        Grid.Row="1"
+                        materialDesign:ScrollViewerAssist.IsAutoHideEnabled="True"
+                        HorizontalScrollBarVisibility="{Binding SelectedItem.HorizontalScrollBarVisibilityRequirement, FallbackValue=Disabled}"
+                        VerticalScrollBarVisibility="{Binding SelectedItem.VerticalScrollBarVisibilityRequirement, FallbackValue=Disabled}">
+            <ContentControl Margin="{Binding MarginRequirement, FallbackValue=16}"
+                            Content="{Binding Content, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}"
+                            DataContext="{Binding SelectedItem}"
+                            DataContextChanged="OnSelectedItemChanged" />
+        </ScrollViewer>
+
+        <materialDesign:Snackbar x:Name="MainSnackbar"
+                                   Grid.Row="1"
+                                   MessageQueue="{materialDesign:MessageQueue}" />
     </Grid>
 </Window>
